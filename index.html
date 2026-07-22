@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Remote Control</title>
+    <style>
+        :root {
+            --bg-color: #F3F3F3;
+            --container-bg: #FFFFFF;
+            --text-primary: #202020;
+            --text-secondary: #505050;
+            --windows-blue: #0078D4;
+            --windows-blue-hover: #0063B1;
+            --danger-red: #E81123;
+            --radius-large: 12px; /* Fluent 2 Geometry */
+            --radius-small: 6px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .fluent-container {
+            background-color: var(--container-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow);
+            border: 1px solid #E1E1E1;
+            overflow: hidden;
+            padding: 25px;
+            text-align: center;
+        }
+
+        h2 { font-weight: 600; margin-top: 0; margin-bottom: 5px; }
+        .status { font-size: 14px; color: var(--text-secondary); margin-bottom: 25px; }
+
+        /* --- UI SETUP (COD) --- */
+        #setupScreen { display: block; }
+        
+        .code-input-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .code-digit {
+            width: 50px;
+            height: 60px;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #C1C1C1;
+            border-radius: var(--radius-small);
+            background-color: #F9F9F9;
+            color: var(--windows-blue);
+        }
+        .code-digit:focus {
+            outline: 2px solid var(--windows-blue);
+            border-color: transparent;
+            background-color: #FFFFFF;
+        }
+
+        .btn-primary {
+            background-color: var(--windows-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background-color: var(--windows-blue-hover); }
+
+        /* --- UI CONTROL PANEL --- */
+        #controlScreen { display: none; }
+
+        .stream-card {
+            background-color: #000;
+            border-radius: var(--radius-small);
+            overflow: hidden;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+        #screenStream {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-secondary {
+            background-color: #F9F9F9;
+            color: var(--text-primary);
+            border: 1px solid #E1E1E1;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background-color: #EBEBEB; }
+
+        .btn-danger {
+            grid-column: span 2;
+            background-color: #FFF;
+            color: var(--danger-red);
+            border: 1px solid var(--danger-red);
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--radius-small);
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover { background-color: var(--danger-red); color: white; }
+
+    </style>
+</head>
+<body>
+
+    <div class="fluent-container">
+        <h2>Remote Control</h2>
+        <div class="status" id="statusText">Se conectează...</div>
+
+        <div id="setupScreen">
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                Introdu codul de 4 cifre afișat pe calculator.
+            </p>
+            <div class="code-input-container">
+                <input type="number" class="code-digit" maxlength="1" oninput="moveToNext(this, 1)">
+                <input type="number" class="code-digit" maxlength="1" oninput="moveToNext(this, 2)">
+                <input type="number" class="code-digit" maxlength="1" oninput="moveToNext(this, 3)">
+                <input type="number" class="code-digit" maxlength="1" oninput="this.blur()">
+            </div>
+            <button class="btn-primary" onclick="requestPairing()">Conectează Telefon</button>
+        </div>
+
+        <div id="controlScreen">
+            <div class="stream-card" onclick="sendControl('CLICK')">
+                <img id="screenStream" src="" alt="Așteptare flux video...">
+            </div>
+            <div class="controls-grid">
+                <button class="btn-secondary" onclick="sendControl('CLICK')">Click Mouse</button>
+                <button class="btn-secondary" onclick="alert('Funcție nedefinită încă')">Tastatură</button>
+                <button class="btn-danger" onclick="sendControl('LOCK')">🔒 BLOCHEAZĂ PC</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Schimbă cu adresa ta reală!
+        const SERVER_URL = "wss://server-3ig6.onrender.com/ws";
+        let ws;
+
+        // Logica Auto-Focus pentru input-uri de cod
+        function moveToNext(input, index) {
+            if (input.value.length >= 1) {
+                const inputs = document.querySelectorAll('.code-digit');
+                if (index < inputs.length) inputs[index].focus();
+            }
+        }
+
+        function connect() {
+            ws = new WebSocket(SERVER_URL);
+            
+            ws.onopen = () => {
+                const savedCode = localStorage.getItem("saved_pair_code");
+                if(savedCode) {
+                    ws.send(JSON.stringify({ type: "PAIR_PHONE", code: savedCode }));
+                    document.getElementById("statusText").innerText = "Reconectare automată...";
+                } else {
+                    document.getElementById("statusText").innerText = "Așteptare pairing...";
+                }
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.type === "PAIR_STATUS") {
+                    if (data.success) {
+                        const code = [...document.querySelectorAll('.code-digit')].map(i => i.value).join('');
+                        localStorage.setItem("saved_pair_code", code); // Salvează pentru data viitoare
+                        document.getElementById("setupScreen").style.display = "none";
+                        document.getElementById("controlScreen").style.display = "block";
+                        document.getElementById("statusText").innerText = "🟢 Conectat la PC";
+                    } else {
+                        alert("Cod incorect!");
+                    }
+                }
+
+                if (data.type === "stream") {
+                    document.getElementById("screenStream").src = "data:image/jpeg;base64," + data.image;
+                }
+                
+                if (data.type === "PC_DISCONNECTED") {
+                    location.reload(); // Reîncărcăm pagina dacă PC-ul pică
+                }
+            };
+
+            ws.onclose = () => {
+                document.getElementById("statusText").innerText = "Deconectat de Cloud";
+                setTimeout(connect, 3000);
+            };
+        }
+
+        function requestPairing() {
+            const inputs = document.querySelectorAll('.code-digit');
+            const code = [...inputs].map(i => i.value).join('');
+            if (code.length === 4 && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: "PAIR_PHONE", code: code }));
+            } else {
+                alert("Te rog introdu un cod de 4 cifre.");
+            }
+        }
+
+        function sendControl(action) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: "command", action: action }));
+            }
+        }
+
+        connect();
+    </script>
+</body>
+</html>
