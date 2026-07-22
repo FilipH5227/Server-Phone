@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC Remote Control</title>
+    <title>DeskGuard Mobile</title>
     <style>
         :root {
             --bg-color: #F3F3F3;
@@ -13,7 +13,7 @@
             --windows-blue: #0078D4;
             --windows-blue-hover: #0063B1;
             --danger-red: #E81123;
-            --radius-large: 12px; /* Fluent 2 Geometry */
+            --radius-large: 12px;
             --radius-small: 6px;
             --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
@@ -42,10 +42,33 @@
             text-align: center;
         }
 
-        h2 { font-weight: 600; margin-top: 0; margin-bottom: 5px; }
-        .status { font-size: 14px; color: var(--text-secondary); margin-bottom: 25px; }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--windows-blue);
+            margin-bottom: 2px;
+            letter-spacing: -0.5px;
+        }
 
-        /* --- UI SETUP (COD) --- */
+        .tagline {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            padding: 6px 12px;
+            background-color: #F9F9F9;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* --- UI PAIRING --- */
         #setupScreen { display: block; }
         
         .code-input-container {
@@ -108,7 +131,7 @@
         .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
         }
 
         .btn-secondary {
@@ -117,6 +140,7 @@
             border: 1px solid #E1E1E1;
             padding: 12px;
             font-size: 14px;
+            font-weight: 500;
             border-radius: var(--radius-small);
             cursor: pointer;
             transition: background 0.2s;
@@ -133,7 +157,7 @@
             font-weight: 600;
             border-radius: var(--radius-small);
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 5px;
             transition: all 0.2s;
         }
         .btn-danger:hover { background-color: var(--danger-red); color: white; }
@@ -143,12 +167,13 @@
 <body>
 
     <div class="fluent-container">
-        <h2>Remote Control</h2>
+        <div class="logo">DeskGuard</div>
+        <div class="tagline">Remote Security</div>
         <div class="status" id="statusText">Se conectează...</div>
 
         <div id="setupScreen">
             <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
-                Introdu codul de 4 cifre afișat pe calculator.
+                Introdu codul de 4 cifre afișat în aplicația DeskGuard de pe PC.
             </p>
             <div class="code-input-container">
                 <input type="number" class="code-digit" maxlength="1" oninput="moveToNext(this, 1)">
@@ -156,27 +181,25 @@
                 <input type="number" class="code-digit" maxlength="1" oninput="moveToNext(this, 3)">
                 <input type="number" class="code-digit" maxlength="1" oninput="this.blur()">
             </div>
-            <button class="btn-primary" onclick="requestPairing()">Conectează Telefon</button>
+            <button class="btn-primary" onclick="requestPairing()">Conectează DeskGuard</button>
         </div>
 
         <div id="controlScreen">
             <div class="stream-card" onclick="sendControl('CLICK')">
-                <img id="screenStream" src="" alt="Așteptare flux video...">
+                <img id="screenStream" src="" alt="Așteptare transmisie PC...">
             </div>
             <div class="controls-grid">
                 <button class="btn-secondary" onclick="sendControl('CLICK')">Click Mouse</button>
-                <button class="btn-secondary" onclick="alert('Funcție nedefinită încă')">Tastatură</button>
+                <button class="btn-secondary" onclick="alert('Funcție în dezvoltare')">Tastatură</button>
                 <button class="btn-danger" onclick="sendControl('LOCK')">🔒 BLOCHEAZĂ PC</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Schimbă cu adresa ta reală!
         const SERVER_URL = "wss://server-3ig6.onrender.com/ws";
         let ws;
 
-        // Logica Auto-Focus pentru input-uri de cod
         function moveToNext(input, index) {
             if (input.value.length >= 1) {
                 const inputs = document.querySelectorAll('.code-digit');
@@ -188,12 +211,12 @@
             ws = new WebSocket(SERVER_URL);
             
             ws.onopen = () => {
-                const savedCode = localStorage.getItem("saved_pair_code");
+                const savedCode = localStorage.getItem("deskguard_pair_code");
                 if(savedCode) {
                     ws.send(JSON.stringify({ type: "PAIR_PHONE", code: savedCode }));
-                    document.getElementById("statusText").innerText = "Reconectare automată...";
+                    document.getElementById("statusText").innerText = "Reconectare DeskGuard...";
                 } else {
-                    document.getElementById("statusText").innerText = "Așteptare pairing...";
+                    document.getElementById("statusText").innerText = "Așteptare asociere...";
                 }
             };
 
@@ -203,12 +226,12 @@
                 if (data.type === "PAIR_STATUS") {
                     if (data.success) {
                         const code = [...document.querySelectorAll('.code-digit')].map(i => i.value).join('');
-                        localStorage.setItem("saved_pair_code", code); // Salvează pentru data viitoare
+                        if(code) localStorage.setItem("deskguard_pair_code", code);
                         document.getElementById("setupScreen").style.display = "none";
                         document.getElementById("controlScreen").style.display = "block";
-                        document.getElementById("statusText").innerText = "🟢 Conectat la PC";
+                        document.getElementById("statusText").innerText = "🟢 Conectat securizat";
                     } else {
-                        alert("Cod incorect!");
+                        alert("Cod DeskGuard incorect sau expirat!");
                     }
                 }
 
@@ -217,12 +240,12 @@
                 }
                 
                 if (data.type === "PC_DISCONNECTED") {
-                    location.reload(); // Reîncărcăm pagina dacă PC-ul pică
+                    location.reload();
                 }
             };
 
             ws.onclose = () => {
-                document.getElementById("statusText").innerText = "Deconectat de Cloud";
+                document.getElementById("statusText").innerText = "Deconectat de la Cloud";
                 setTimeout(connect, 3000);
             };
         }
@@ -233,7 +256,7 @@
             if (code.length === 4 && ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({ type: "PAIR_PHONE", code: code }));
             } else {
-                alert("Te rog introdu un cod de 4 cifre.");
+                alert("Introdu codul din 4 cifre de pe ecranul PC-ului.");
             }
         }
 
