@@ -1,698 +1,246 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DeskGuard Mobile - Fluent 2</title>
-    <style>
-        :root {
-            /* Fluent 2 Light Palette */
-            --fluent-brand: #0078D4;
-            --fluent-brand-hover: #106EBE;
-            --fluent-brand-pressed: #005A9E;
-            --fluent-bg-page: #FFFFFF;
-            --fluent-surface-card: #F8F9FA;
-            --fluent-text-primary: #242424;
-            --fluent-text-secondary: #616161;
-            --fluent-stroke: #E0E0E0;
-            --fluent-stroke-focus: #0078D4;
-            --fluent-danger: #D13438;
-            --fluent-danger-bg: #FDE8E8;
-            --fluent-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --fluent-radius-m: 10px;
-            --fluent-radius-l: 20px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeskGuard Mobile</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+    body {
+      background-color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #334155;
+    }
 
-        body {
-            background-color: var(--fluent-bg-page);
-            color: var(--fluent-text-primary);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            align-items: center;
-        }
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
 
-        /* FLUENT APP BAR / HEADER */
-        .app-header {
-            width: 100%;
-            height: 56px;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            background: var(--fluent-bg-page);
-            border-bottom: 1px solid #F0F0F0;
-            gap: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    .header-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
 
-        .header-icon {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-            border-radius: 4px;
-        }
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0284c7;
+    }
 
-        .brand-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--fluent-brand);
-        }
+    /* Content Area */
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-        .main-container {
-            width: 100%;
-            max-width: 440px;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            justify-content: center;
-        }
+    /* Card */
+    .card {
+      background: #f1f5f9;
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 32px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      text-align: center;
+    }
 
-        /* FLUENT CARD */
-        .card {
-            width: 100%;
-            background-color: var(--fluent-surface-card);
-            border-radius: var(--fluent-radius-l);
-            padding: 32px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: var(--fluent-shadow);
-            border: 1px solid #EDEDED;
-        }
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0284c7;
+      margin-bottom: 12px;
+    }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+    .card-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
 
-        .card-logo {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-            border-radius: 6px;
-        }
+    /* Inputs */
+    .input-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
 
-        .card-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--fluent-brand);
-        }
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
 
-        /* FLUENT TEXT INPUT */
-        .input-group {
-            width: 100%;
-            margin-bottom: 12px;
-        }
+    .input-field:focus {
+      border-color: #0284c7;
+    }
 
-        .input-field {
-            width: 100%;
-            height: 44px;
-            border: 1px solid #D1D1D1;
-            border-radius: var(--fluent-radius-m);
-            padding: 0 14px;
-            font-size: 14px;
-            outline: none;
-            background: #FFFFFF;
-            color: var(--fluent-text-primary);
-            transition: all 0.2s ease;
-        }
+    /* PIN Inputs */
+    .pin-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
 
-        .input-field:focus {
-            border: 2px solid var(--fluent-stroke-focus);
-            padding: 0 13px;
-        }
+    .pin-box {
+      width: 48px;
+      height: 56px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      outline: none;
+      text-transform: uppercase;
+    }
 
-        /* FLUENT BUTTONS */
-        .btn-primary {
-            width: 100%;
-            height: 42px;
-            background-color: var(--fluent-brand);
-            color: #FFFFFF;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--fluent-radius-m);
-            cursor: pointer;
-            transition: background-color 0.15s ease, transform 0.05s ease;
-            margin-top: 4px;
-        }
+    .pin-box:focus {
+      border-color: #0284c7;
+    }
 
-        .btn-primary:hover {
-            background-color: var(--fluent-brand-hover);
-        }
+    /* Buttons */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background-color: #0284c7;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
 
-        .btn-primary:active {
-            background-color: var(--fluent-brand-pressed);
-            transform: scale(0.98);
-        }
+    .btn-primary:hover {
+      background-color: #0369a1;
+    }
 
-        .btn-link {
-            background: transparent;
-            border: none;
-            color: var(--fluent-brand);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 12px;
-        }
+    .link-btn {
+      display: inline-block;
+      margin-top: 18px;
+      color: #0284c7;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
 
-        .btn-link:hover {
-            text-decoration: underline;
-        }
+    .link-btn:hover {
+      text-decoration: underline;
+    }
 
-        /* SECTION VISIBILITY */
-        .view-section {
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .view-section.active {
-            display: flex !important;
-        }
-
-        /* PAIRING PIN INPUTS */
-        .pin-container {
-            display: flex;
-            gap: 8px;
-            margin: 20px 0;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .pin-box {
-            width: 42px;
-            height: 52px;
-            background-color: #FFFFFF;
-            color: var(--fluent-text-primary);
-            font-size: 22px;
-            font-weight: 700;
-            text-align: center;
-            border-radius: var(--fluent-radius-m);
-            border: 1px solid #D1D1D1;
-            text-transform: uppercase;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .pin-box:focus {
-            border: 2px solid var(--fluent-stroke-focus);
-        }
-
-        /* FLUENT BADGES */
-        .status-badge {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 6px 16px;
-            border-radius: 12px;
-            background: #E0E0E0;
-            color: var(--fluent-text-secondary);
-            margin-top: 8px;
-        }
-
-        .status-badge.online {
-            background: #DFF6DD;
-            color: #107C41;
-        }
-
-        .status-badge.connecting {
-            background: #FFF4CE;
-            color: #797775;
-        }
-
-        /* DASHBOARD ACTIONS */
-        .action-list {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-action {
-            width: 100%;
-            height: 48px;
-            background-color: var(--fluent-surface-card);
-            color: var(--fluent-text-primary);
-            border: 1px solid #EDEDED;
-            border-radius: var(--fluent-radius-m);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.15s;
-        }
-
-        .btn-action:hover {
-            background-color: #F0F0F0;
-        }
-
-        .btn-action.danger {
-            color: var(--fluent-danger);
-            border-color: #F8C2C2;
-            background-color: var(--fluent-danger-bg);
-        }
-
-        /* FULLSCREEN OVERLAY */
-        #fullscreen-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000000;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #fs-stream {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            user-select: none;
-        }
-
-        .close-fs {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10000;
-        }
-
-        .msg-info {
-            font-size: 13px;
-            color: var(--fluent-text-secondary);
-            text-align: center;
-        }
-
-        .msg-error {
-            color: var(--fluent-danger);
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 10px;
-            text-align: center;
-        }
-    </style>
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
-    <header class="app-header">
-        <img src="Copilot_20260725_084329.png" class="header-icon" alt="DeskGuard">
-        <span class="brand-title">DeskGuard</span>
-    </header>
+  <header class="header">
+    <img class="header-logo" src="data:image/png;base64,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" alt="DeskGuard Logo">
+    <span class="header-title">DeskGuard</span>
+  </header>
 
-    <div class="main-container">
+  <main class="content">
+    
+    <div id="pinScreen" class="card">
+      <h1 class="card-title">Enter PIN</h1>
+      <p class="card-subtitle">Enter the 6-character PIN displayed on your PC Agent app.</p>
+      
+      <div class="pin-container">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 0)">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 1)">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 2)">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 3)">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 4)">
+        <input type="text" class="pin-box" maxlength="1" oninput="moveNext(this, 5)">
+      </div>
 
-        <div id="auth-view" class="view-section active">
-            <div class="card">
-                <div class="card-header">
-                    <img src="Copilot_20260725_084329.png" class="card-logo" alt="Logo">
-                    <h2 class="card-title" id="auth-header-title">DeskGuard</h2>
-                </div>
-                
-                <div class="input-group">
-                    <input type="text" id="username-input" class="input-field" placeholder="Username" autocomplete="username" />
-                </div>
-                <div class="input-group">
-                    <input type="password" id="password-input" class="input-field" placeholder="Password" autocomplete="current-password" />
-                </div>
-                
-                <button class="btn-primary" id="btn-login">Log In</button>
-                <button class="btn-link" id="btn-toggle-mode">Don't have an account? Create one</button>
-                
-                <div id="auth-msg" class="msg-error"></div>
-            </div>
-        </div>
-
-        <div id="pairing-view" class="view-section">
-            <div class="card">
-                <h2 class="card-title" style="margin-bottom: 6px;">Enter PIN</h2>
-                <p class="msg-info">Enter the 6-character PIN displayed on your PC Agent app.</p>
-                
-                <div class="pin-container" id="pin-container">
-                    <input type="text" maxlength="1" class="pin-box" data-idx="0" />
-                    <input type="text" maxlength="1" class="pin-box" data-idx="1" />
-                    <input type="text" maxlength="1" class="pin-box" data-idx="2" />
-                    <input type="text" maxlength="1" class="pin-box" data-idx="3" />
-                    <input type="text" maxlength="1" class="pin-box" data-idx="4" />
-                    <input type="text" maxlength="1" class="pin-box" data-idx="5" />
-                </div>
-
-                <button class="btn-primary" id="btn-pair">Pair & Connect</button>
-                <button class="btn-link" id="btn-change-acc">Switch Account</button>
-                <div id="pairing-msg" class="msg-error"></div>
-            </div>
-        </div>
-
-        <div id="dashboard-view" class="view-section">
-            <div class="card">
-                <h3 id="pc-name-label" style="font-size: 18px; font-weight: 600;">DeskGuard PC</h3>
-                <span id="pc-status-badge" class="status-badge">Offline</span>
-            </div>
-
-            <div class="action-list">
-                <button class="btn-action danger" id="btn-lock">🔒 Lock Workstation</button>
-                <button class="btn-action" id="btn-remote">🎮 Remote Control</button>
-                <button class="btn-action" id="btn-stream">👁️ Live View Stream</button>
-            </div>
-            
-            <button id="btn-logout" class="btn-link" style="margin-top: 20px; color: var(--fluent-text-secondary);">
-                Sign Out
-            </button>
-        </div>
-
+      <button class="btn-primary" onclick="pairAndConnect()">Pair & Connect</button>
+      <div>
+        <a class="link-btn" onclick="toggleScreen('loginScreen')">Switch Account</a>
+      </div>
     </div>
 
-    <div id="fullscreen-overlay">
-        <div class="close-fs" id="btn-close-fs">✕</div>
-        <img id="fs-stream" alt="PC Stream"/>
+    <div id="loginScreen" class="card hidden">
+      <h1 class="card-title">DeskGuard PC</h1>
+      
+      <div class="input-group">
+        <input type="text" id="username" class="input-field" placeholder="Username" value="Filip">
+      </div>
+      
+      <div class="input-group">
+        <input type="password" id="password" class="input-field" placeholder="Password" value="********">
+      </div>
+
+      <button class="btn-primary" onclick="login()">Log In</button>
+      <div>
+        <a class="link-btn" onclick="alert('Înregistrare cont...')">Don't have an account? Create one</a>
+      </div>
     </div>
 
-    <script>
-        const Config = {
-            SERVER_URL: "wss://server-3ig6.onrender.com",
-            STREAM_TIMEOUT_MS: 4000
-        };
+  </main>
 
-        const State = {
-            socket: null,
-            lastFrameTimestamp: 0,
-            isControlModeEnabled: false,
-            watchdogTimer: null,
-            isSignUpMode: false
-        };
+  <script>
+    const pinInputs = document.querySelectorAll('.pin-box');
 
-        // UI View Switcher
-        function setView(viewId) {
-            document.querySelectorAll(".view-section").forEach(view => {
-                view.classList.remove("active");
-            });
-            const targetView = document.getElementById(viewId);
-            if (targetView) targetView.classList.add("active");
+    function moveNext(input, index) {
+      if (input.value.length === 1 && index < pinInputs.length - 1) {
+        pinInputs[index + 1].focus();
+      }
+    }
+
+    // Suport pentru Backspace
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          pinInputs[index - 1].focus();
         }
+      });
+    });
 
-        function setStatusBadge(statusText, cssClass = "") {
-            const badge = document.getElementById("pc-status-badge");
-            if (!badge) return;
-            badge.innerText = statusText;
-            badge.className = `status-badge ${cssClass}`.trim();
-        }
+    function toggleScreen(screenId) {
+      document.getElementById('pinScreen').classList.add('hidden');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById(screenId).classList.remove('hidden');
+    }
 
-        function setErrorMessage(elementId, message) {
-            const el = document.getElementById(elementId);
-            if (el) el.innerText = message || "";
-        }
+    function pairAndConnect() {
+      let pin = Array.from(pinInputs).map(i => i.value).join('');
+      if (pin.length === 6) {
+        alert('Conectat cu succes folosind PIN-ul: ' + pin);
+      } else {
+        alert('Vă rugăm să introduceți un PIN valid de 6 caractere.');
+      }
+    }
 
-        // Local Storage Helpers
-        const Storage = {
-            getUser: () => localStorage.getItem("dg_user") || "",
-            getPass: () => localStorage.getItem("dg_pass") || "",
-            getIsPaired: () => localStorage.getItem("dg_paired") === "true",
-            saveSession: (user, pass) => {
-                localStorage.setItem("dg_user", user);
-                localStorage.setItem("dg_pass", pass);
-            },
-            setPaired: (isPaired) => {
-                localStorage.setItem("dg_paired", isPaired ? "true" : "false");
-            },
-            clearAll: () => {
-                localStorage.clear();
-            }
-        };
-
-        // Smart PIN Input System
-        function initPinBoxSystem() {
-            const boxes = Array.from(document.querySelectorAll('.pin-box'));
-
-            boxes.forEach((box, index) => {
-                box.addEventListener('input', () => {
-                    const val = box.value.toUpperCase();
-                    box.value = val;
-
-                    if (val && index < boxes.length - 1) {
-                        boxes[index + 1].focus();
-                    }
-
-                    if (getEnteredPin().length === 6) {
-                        handlePairingSubmit(false);
-                    }
-                });
-
-                box.addEventListener('keydown', (e) => {
-                    if (e.key === 'Backspace' && !box.value && index > 0) {
-                        boxes[index - 1].focus();
-                    }
-                });
-
-                box.addEventListener('paste', (e) => {
-                    e.preventDefault();
-                    const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim().toUpperCase();
-                    if (!pasteData) return;
-
-                    const chars = pasteData.replace(/[^A-Z0-9]/g, '').slice(0, 6);
-                    chars.split('').forEach((ch, i) => {
-                        if (boxes[i]) boxes[i].value = ch;
-                    });
-
-                    if (chars.length === 6) {
-                        boxes[5].focus();
-                        handlePairingSubmit(false);
-                    } else if (boxes[chars.length]) {
-                        boxes[chars.length].focus();
-                    }
-                });
-            });
-        }
-
-        function getEnteredPin() {
-            return Array.from(document.querySelectorAll('.pin-box'))
-                .map(input => input.value.trim().toUpperCase())
-                .join('');
-        }
-
-        // Authentication & Mode Toggle
-        function toggleAuthMode() {
-            State.isSignUpMode = !State.isSignUpMode;
-            const loginBtn = document.getElementById("btn-login");
-            const toggleBtn = document.getElementById("btn-toggle-mode");
-
-            if (State.isSignUpMode) {
-                loginBtn.innerText = "Create Account";
-                toggleBtn.innerText = "Already have an account? Log In";
-            } else {
-                loginBtn.innerText = "Log In";
-                toggleBtn.innerText = "Don't have an account? Create one";
-            }
-        }
-
-        function handleAuthSubmit() {
-            const username = document.getElementById("username-input").value.trim();
-            const password = document.getElementById("password-input").value.trim();
-
-            if (!username || !password) {
-                setErrorMessage("auth-msg", "Please enter both username and password!");
-                return;
-            }
-
-            setErrorMessage("auth-msg", "");
-            Storage.saveSession(username, password);
-            setView("pairing-view");
-        }
-
-        function handlePairingSubmit(autoReconnect = false) {
-            const pin = getEnteredPin();
-
-            if (!autoReconnect && pin.length < 6) {
-                setErrorMessage("pairing-msg", "Please enter the full 6-character PIN!");
-                return;
-            }
-
-            setErrorMessage("pairing-msg", "");
-            connectWebSocket(autoReconnect ? "AUTO" : pin);
-        }
-
-        // WebSocket Engine
-        function connectWebSocket(pinCode) {
-            setStatusBadge("Connecting...", "connecting");
-
-            if (State.socket) {
-                try { State.socket.close(); } catch(e) {}
-            }
-
-            State.socket = new WebSocket(Config.SERVER_URL);
-
-            State.socket.onopen = () => {
-                const username = Storage.getUser();
-                const password = Storage.getPass();
-
-                State.socket.send(JSON.stringify({
-                    type: "PAIR_MOBILE",
-                    username: username,
-                    password: password,
-                    pin: pinCode
-                }));
-            };
-
-            State.socket.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-
-                    switch (data.type) {
-                        case "PAIR_SUCCESS":
-                            Storage.setPaired(true);
-                            setView("dashboard-view");
-                            startWatchdog();
-                            break;
-
-                        case "ERROR":
-                            if (document.getElementById("pairing-view").classList.contains("active")) {
-                                setErrorMessage("pairing-msg", data.message || "Authentication/Pairing failed!");
-                            } else {
-                                setView("auth-view");
-                                setErrorMessage("auth-msg", data.message || "Invalid username or password!");
-                            }
-                            setStatusBadge("Offline", "");
-                            break;
-
-                        case "stream":
-                            if (data.image) {
-                                State.lastFrameTimestamp = Date.now();
-                                document.getElementById("fs-stream").src = "data:image/jpeg;base64," + data.image;
-                                setStatusBadge("Online", "online");
-                            }
-                            break;
-
-                        case "STATUS":
-                            if (data.status === "OFFLINE") {
-                                setStatusBadge("Offline", "");
-                            }
-                            break;
-                    }
-                } catch (err) {
-                    console.error("Invalid response from server:", err);
-                }
-            };
-
-            State.socket.onerror = () => {
-                setStatusBadge("Offline", "");
-            };
-
-            State.socket.onclose = () => {
-                setStatusBadge("Offline", "");
-            };
-        }
-
-        // Commands
-        function sendControlCommand(actionName) {
-            if (State.socket && State.socket.readyState === WebSocket.OPEN) {
-                State.socket.send(JSON.stringify({
-                    type: "command",
-                    action: actionName
-                }));
-            } else {
-                alert("Disconnected! Please verify PC Agent status.");
-            }
-        }
-
-        function openStreamView(enableControl) {
-            State.isControlModeEnabled = enableControl;
-            document.getElementById("fullscreen-overlay").style.display = "flex";
-        }
-
-        function closeStreamView() {
-            document.getElementById("fullscreen-overlay").style.display = "none";
-        }
-
-        function startWatchdog() {
-            if (State.watchdogTimer) clearInterval(State.watchdogTimer);
-
-            State.watchdogTimer = setInterval(() => {
-                if (Date.now() - State.lastFrameTimestamp > Config.STREAM_TIMEOUT_MS) {
-                    setStatusBadge("Offline", "");
-                }
-            }, 2000);
-        }
-
-        function handleLogout() {
-            if (State.watchdogTimer) clearInterval(State.watchdogTimer);
-            if (State.socket) try { State.socket.close(); } catch(e){}
-
-            Storage.clearAll();
-            setView("auth-view");
-        }
-
-        // Initialize App
-        document.addEventListener("DOMContentLoaded", () => {
-            initPinBoxSystem();
-
-            document.getElementById("btn-login").addEventListener("click", handleAuthSubmit);
-            document.getElementById("btn-toggle-mode").addEventListener("click", toggleAuthMode);
-            document.getElementById("btn-pair").addEventListener("click", () => handlePairingSubmit(false));
-            document.getElementById("btn-change-acc").addEventListener("click", () => setView("auth-view"));
-            document.getElementById("btn-lock").addEventListener("click", () => sendControlCommand("LOCK"));
-            document.getElementById("btn-remote").addEventListener("click", () => openStreamView(true));
-            document.getElementById("btn-stream").addEventListener("click", () => openStreamView(false));
-            document.getElementById("btn-close-fs").addEventListener("click", closeStreamView);
-            document.getElementById("btn-logout").addEventListener("click", handleLogout);
-
-            document.getElementById("fs-stream").addEventListener("click", () => {
-                if (State.isControlModeEnabled) {
-                    sendControlCommand("CLICK");
-                }
-            });
-
-            // Automatic Login Check for Database Account
-            const savedUser = Storage.getUser();
-            const savedPass = Storage.getPass();
-            const isPaired = Storage.getIsPaired();
-
-            if (savedUser && savedPass) {
-                document.getElementById("username-input").value = savedUser;
-                document.getElementById("password-input").value = savedPass;
-
-                if (isPaired) {
-                    setView("dashboard-view");
-                    connectWebSocket("AUTO");
-                } else {
-                    setView("pairing-view");
-                }
-            } else {
-                setView("auth-view");
-            }
-        });
-    </script>
+    function login() {
+      toggleScreen('pinScreen');
+    }
+  </script>
 </body>
 </html>
