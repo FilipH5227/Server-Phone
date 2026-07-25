@@ -3,289 +3,694 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DeskGuard Mobile</title>
+    <title>DeskGuard Mobile - Fluent 2</title>
     <style>
         :root {
-            --bg-color: #FFFFFF;
-            --card-bg: #F8F9FA;
-            --primary-blue: #0078D4;
-            --text-dark: #111827;
-            --text-muted: #6C757D;
-            --border-color: #E0E0E0;
-            --danger-color: #E81123;
-            --pin-bg: #1E222D;
+            /* Fluent 2 Light Palette */
+            --fluent-brand: #0078D4;
+            --fluent-brand-hover: #106EBE;
+            --fluent-brand-pressed: #005A9E;
+            --fluent-bg-page: #FFFFFF;
+            --fluent-surface-card: #F8F9FA;
+            --fluent-text-primary: #242424;
+            --fluent-text-secondary: #616161;
+            --fluent-stroke: #E0E0E0;
+            --fluent-stroke-focus: #0078D4;
+            --fluent-danger: #D13438;
+            --fluent-danger-bg: #FDE8E8;
+            --fluent-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --fluent-radius-m: 10px;
+            --fluent-radius-l: 20px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-color); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; align-items: center; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* HEADER */
-        .app-header { width: 100%; padding: 12px 18px; display: flex; align-items: center; background: #FFFFFF; border-bottom: 1px solid #F0F0F0; gap: 8px; }
-        .header-icon { width: 26px; height: 26px; object-fit: contain; }
-        .brand-title { font-size: 16px; font-weight: 700; color: var(--primary-blue); }
+        body {
+            background-color: var(--fluent-bg-page);
+            color: var(--fluent-text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
 
-        .container { width: 100%; max-width: 420px; padding: 20px; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        /* FLUENT APP BAR / HEADER */
+        .app-header {
+            width: 100%;
+            height: 56px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            background: var(--fluent-bg-page);
+            border-bottom: 1px solid #F0F0F0;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-        /* AUTH VIEW */
-        #auth-view { width: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 15px; }
-        .auth-card { width: 100%; background-color: var(--card-bg); border-radius: 20px; padding: 25px 20px; display: flex; flex-direction: column; align-items: center; }
-        .auth-title { font-size: 22px; font-weight: 700; color: var(--primary-blue); display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-        .auth-logo { width: 36px; height: 36px; object-fit: contain; }
-        .auth-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-        
-        .input-field { width: 100%; height: 44px; border: 1px solid var(--border-color); border-radius: 10px; padding: 0 14px; margin-bottom: 12px; outline: none; background: #FFF; font-size: 14px; }
-        .input-field:focus { border-color: var(--primary-blue); }
-        .btn-primary { width: 100%; height: 46px; background-color: var(--primary-blue); color: white; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; margin-top: 5px; }
-        .btn-link { background: none; border: none; color: var(--primary-blue); font-size: 12px; margin-top: 12px; cursor: pointer; }
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
 
-        /* PAIRING VIEW */
-        #pairing-view { width: 100%; display: none; flex-direction: column; align-items: center; padding-top: 25px; }
-        .pair-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-        .pair-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; text-align: center; }
-        .pin-inputs { display: flex; gap: 6px; margin-bottom: 25px; }
-        .pin-input-box { width: 44px; height: 56px; background-color: var(--pin-bg); color: #FFFFFF; font-size: 22px; font-weight: bold; text-align: center; border-radius: 10px; border: none; text-transform: uppercase; }
+        .brand-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--fluent-brand);
+        }
 
-        /* DASHBOARD VIEW */
-        #dashboard-view { width: 100%; display: none; flex-direction: column; align-items: center; }
-        .pc-card { width: 100%; background-color: var(--card-bg); border-radius: 16px; padding: 25px; display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
-        .pc-icon { width: 70px; height: 55px; margin-bottom: 12px; }
-        .pc-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-        .pc-status { font-size: 13px; font-weight: 600; color: var(--text-muted); }
-        .pc-status.online { color: #10B981; }
+        .main-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
 
-        /* BUTTONS SECTION */
-        .options-section { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .btn-action { width: 100%; height: 50px; background-color: #FFFFFF; color: var(--text-dark); border: 1.5px solid var(--border-color); border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; }
-        .btn-action:active { background-color: #F3F4F6; }
-        .btn-danger { color: var(--danger-color); border-color: var(--danger-color); }
+        /* FLUENT CARD */
+        .card {
+            width: 100%;
+            background-color: var(--fluent-surface-card);
+            border-radius: var(--fluent-radius-l);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--fluent-shadow);
+            border: 1px solid #EDEDED;
+        }
 
-        .status-msg { margin-top: 10px; font-size: 12px; text-align: center; color: var(--danger-color); }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-        /* FULLSCREEN OVERLAY (CONTROL & LIVE VIEW) */
-        #fullscreen-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; }
-        #fs-stream { width: 100%; height: 100%; object-fit: contain; }
-        .close-fs { position: absolute; top: 18px; right: 18px; background: rgba(0,0,0,0.6); color: white; border: 1.5px solid white; border-radius: 50%; width: 38px; height: 38px; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .card-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--fluent-brand);
+        }
+
+        /* FLUENT TEXT INPUT */
+        .input-group {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #D1D1D1;
+            border-radius: var(--fluent-radius-m);
+            padding: 0 14px;
+            font-size: 14px;
+            outline: none;
+            background: #FFFFFF;
+            color: var(--fluent-text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            border: 2px solid var(--fluent-stroke-focus);
+            padding: 0 13px;
+        }
+
+        /* FLUENT BUTTONS */
+        .btn-primary {
+            width: 100%;
+            height: 42px;
+            background-color: var(--fluent-brand);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--fluent-radius-m);
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.05s ease;
+            margin-top: 4px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--fluent-brand-hover);
+        }
+
+        .btn-primary:active {
+            background-color: var(--fluent-brand-pressed);
+            transform: scale(0.98);
+        }
+
+        .btn-link {
+            background: transparent;
+            border: none;
+            color: var(--fluent-brand);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* SECTION VISIBILITY */
+        .view-section {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .view-section.active {
+            display: flex !important;
+        }
+
+        /* PAIRING PIN INPUTS */
+        .pin-container {
+            display: flex;
+            gap: 8px;
+            margin: 20px 0;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .pin-box {
+            width: 42px;
+            height: 52px;
+            background-color: #FFFFFF;
+            color: var(--fluent-text-primary);
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            border-radius: var(--fluent-radius-m);
+            border: 1px solid #D1D1D1;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .pin-box:focus {
+            border: 2px solid var(--fluent-stroke-focus);
+        }
+
+        /* FLUENT BADGES */
+        .status-badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 12px;
+            background: #E0E0E0;
+            color: var(--fluent-text-secondary);
+            margin-top: 8px;
+        }
+
+        .status-badge.online {
+            background: #DFF6DD;
+            color: #107C41;
+        }
+
+        .status-badge.connecting {
+            background: #FFF4CE;
+            color: #797775;
+        }
+
+        /* DASHBOARD ACTIONS */
+        .action-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            width: 100%;
+            height: 48px;
+            background-color: var(--fluent-surface-card);
+            color: var(--fluent-text-primary);
+            border: 1px solid #EDEDED;
+            border-radius: var(--fluent-radius-m);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.15s;
+        }
+
+        .btn-action:hover {
+            background-color: #F0F0F0;
+        }
+
+        .btn-action.danger {
+            color: var(--fluent-danger);
+            border-color: #F8C2C2;
+            background-color: var(--fluent-danger-bg);
+        }
+
+        /* FULLSCREEN OVERLAY */
+        #fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #fs-stream {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            user-select: none;
+        }
+
+        .close-fs {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+        }
+
+        .msg-info {
+            font-size: 13px;
+            color: var(--fluent-text-secondary);
+            text-align: center;
+        }
+
+        .msg-error {
+            color: var(--fluent-danger);
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <header class="app-header">
-        <img src="edited-image.png" class="header-icon" onerror="this.style.display='none'" alt="Icon"/>
+        <img src="Copilot_20260724_174243.png" class="header-icon" alt="DeskGuard" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'%230078D4\'><path d=\'M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-3z\'/></svg>'">
         <span class="brand-title">DeskGuard</span>
     </header>
 
-    <div class="container">
-        <div id="auth-view">
-            <div class="auth-card">
-                <h2 class="auth-title">
-                    <img src="edited-image.png" class="auth-logo" onerror="this.style.display='none'" alt="Logo"/>
-                    DeskGuard
-                </h2>
-                <p class="auth-sub">Mobile Remote Agent</p>
+    <div class="main-container">
 
-                <input type="text" id="username-input" class="input-field" placeholder="Username" />
-                <input type="password" id="password-input" class="input-field" placeholder="Password" />
-
-                <button class="btn-primary" id="btn-auth-action" onclick="handleAuth()">Log In</button>
-                <button class="btn-link" id="btn-auth-toggle" onclick="toggleAuthMode()">Don't have an account? Create one</button>
-                <p id="auth-status" class="status-msg"></p>
+        <div id="auth-view" class="view-section active">
+            <div class="card">
+                <div class="card-header">
+                    <img src="Copilot_20260724_174243.png" class="card-logo" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 24 24\' fill=\'%230078D4\'><path d=\'M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-3z\'/></svg>'">
+                    <h2 class="card-title" id="auth-header-title">DeskGuard</h2>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="username-input" class="input-field" placeholder="Username" autocomplete="username" />
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password-input" class="input-field" placeholder="Password" autocomplete="current-password" />
+                </div>
+                
+                <button class="btn-primary" id="btn-login">Log In</button>
+                <button class="btn-link" id="btn-toggle-mode">Don't have an account? Create one</button>
+                
+                <div id="auth-msg" class="msg-error"></div>
             </div>
         </div>
 
-        <div id="pairing-view">
-            <h2 class="pair-title">Enter PC Pairing Code</h2>
-            <p class="pair-subtitle">Enter the 6-character PIN displayed on your PC</p>
-            <div class="pin-inputs">
-                <input type="text" maxlength="1" class="pin-input-box" />
-                <input type="text" maxlength="1" class="pin-input-box" />
-                <input type="text" maxlength="1" class="pin-input-box" />
-                <input type="text" maxlength="1" class="pin-input-box" />
-                <input type="text" maxlength="1" class="pin-input-box" />
-                <input type="text" maxlength="1" class="pin-input-box" />
+        <div id="pairing-view" class="view-section">
+            <div class="card">
+                <h2 class="card-title" style="margin-bottom: 6px;">Enter PIN</h2>
+                <p class="msg-info">Enter the 6-character PIN displayed on your PC Agent app.</p>
+                
+                <div class="pin-container" id="pin-container">
+                    <input type="text" maxlength="1" class="pin-box" data-idx="0" />
+                    <input type="text" maxlength="1" class="pin-box" data-idx="1" />
+                    <input type="text" maxlength="1" class="pin-box" data-idx="2" />
+                    <input type="text" maxlength="1" class="pin-box" data-idx="3" />
+                    <input type="text" maxlength="1" class="pin-box" data-idx="4" />
+                    <input type="text" maxlength="1" class="pin-box" data-idx="5" />
+                </div>
+
+                <button class="btn-primary" id="btn-pair">Pair & Connect</button>
+                <button class="btn-link" id="btn-change-acc">Switch Account</button>
+                <div id="pairing-msg" class="msg-error"></div>
             </div>
-            <button class="btn-primary" onclick="connectToPC(false)">Connect to PC</button>
-            <p id="pair-status" class="status-msg"></p>
         </div>
 
-        <div id="dashboard-view">
-            <div class="pc-card">
-                <svg class="pc-icon" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="5" width="90" height="55" rx="8" stroke="#000000" stroke-width="8" fill="#0078D4"/>
-                    <rect x="38" y="60" width="8" height="12" fill="#000000"/>
-                    <rect x="54" y="60" width="8" height="12" fill="#000000"/>
-                    <rect x="22" y="72" width="56" height="6" rx="3" fill="#000000"/>
-                </svg>
-                <h3 class="pc-name">My PC</h3>
-                <span id="pc-status-label" class="pc-status">Offline</span>
+        <div id="dashboard-view" class="view-section">
+            <div class="card">
+                <h3 id="pc-name-label" style="font-size: 18px; font-weight: 600;">DeskGuard PC</h3>
+                <span id="pc-status-badge" class="status-badge">Offline</span>
             </div>
 
-            <div class="options-section">
-                <button class="btn-action btn-danger" onclick="sendControl('LOCK')">🔒 Lock</button>
-                <button class="btn-action" onclick="openFullscreen(true)">🎮 Control PC</button>
-                <button class="btn-action" onclick="openFullscreen(false)">👁️ Live View</button>
+            <div class="action-list">
+                <button class="btn-action danger" id="btn-lock">🔒 Lock Workstation</button>
+                <button class="btn-action" id="btn-remote">🎮 Remote Control</button>
+                <button class="btn-action" id="btn-stream">👁️ Live View Stream</button>
             </div>
+            
+            <button id="btn-logout" class="btn-link" style="margin-top: 20px; color: var(--fluent-text-secondary);">
+                Sign Out
+            </button>
         </div>
+
     </div>
 
     <div id="fullscreen-overlay">
-        <div class="close-fs" onclick="closeFullscreen()">✕</div>
-        <img id="fs-stream" alt="Fullscreen Stream"/>
+        <div class="close-fs" id="btn-close-fs">✕</div>
+        <img id="fs-stream" alt="PC Stream"/>
     </div>
 
     <script>
-        const SERVER_URL = "wss://server-3ig6.onrender.com";
-        let socket = null;
-        let authMode = "LOGIN";
-        let lastFrameTime = 0;
-        let isControlMode = false;
+        const Config = {
+            SERVER_URL: "wss://server-3ig6.onrender.com",
+            STREAM_TIMEOUT_MS: 4000
+        };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = localStorage.getItem("dg_user");
-            const savedPass = localStorage.getItem("dg_pass");
-            const isPaired = localStorage.getItem("dg_paired") === "true";
+        const State = {
+            socket: null,
+            lastFrameTimestamp: 0,
+            isControlModeEnabled: false,
+            watchdogTimer: null,
+            isSignUpMode: false
+        };
+
+        // UI View Switcher
+        function setView(viewId) {
+            document.querySelectorAll(".view-section").forEach(view => {
+                view.classList.remove("active");
+            });
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.add("active");
+        }
+
+        function setStatusBadge(statusText, cssClass = "") {
+            const badge = document.getElementById("pc-status-badge");
+            if (!badge) return;
+            badge.innerText = statusText;
+            badge.className = `status-badge ${cssClass}`.trim();
+        }
+
+        function setErrorMessage(elementId, message) {
+            const el = document.getElementById(elementId);
+            if (el) el.innerText = message || "";
+        }
+
+        // Local Storage Helpers
+        const Storage = {
+            getUser: () => localStorage.getItem("dg_user") || "",
+            getPass: () => localStorage.getItem("dg_pass") || "",
+            getIsPaired: () => localStorage.getItem("dg_paired") === "true",
+            saveSession: (user, pass) => {
+                localStorage.setItem("dg_user", user);
+                localStorage.setItem("dg_pass", pass);
+            },
+            setPaired: (isPaired) => {
+                localStorage.setItem("dg_paired", isPaired ? "true" : "false");
+            },
+            clearAll: () => {
+                localStorage.clear();
+            }
+        };
+
+        // Smart PIN Input System
+        function initPinBoxSystem() {
+            const boxes = Array.from(document.querySelectorAll('.pin-box'));
+
+            boxes.forEach((box, index) => {
+                box.addEventListener('input', () => {
+                    const val = box.value.toUpperCase();
+                    box.value = val;
+
+                    if (val && index < boxes.length - 1) {
+                        boxes[index + 1].focus();
+                    }
+
+                    if (getEnteredPin().length === 6) {
+                        handlePairingSubmit(false);
+                    }
+                });
+
+                box.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !box.value && index > 0) {
+                        boxes[index - 1].focus();
+                    }
+                });
+
+                box.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim().toUpperCase();
+                    if (!pasteData) return;
+
+                    const chars = pasteData.replace(/[^A-Z0-9]/g, '').slice(0, 6);
+                    chars.split('').forEach((ch, i) => {
+                        if (boxes[i]) boxes[i].value = ch;
+                    });
+
+                    if (chars.length === 6) {
+                        boxes[5].focus();
+                        handlePairingSubmit(false);
+                    } else if (boxes[chars.length]) {
+                        boxes[chars.length].focus();
+                    }
+                });
+            });
+        }
+
+        function getEnteredPin() {
+            return Array.from(document.querySelectorAll('.pin-box'))
+                .map(input => input.value.trim().toUpperCase())
+                .join('');
+        }
+
+        // Authentication & Mode Toggle
+        function toggleAuthMode() {
+            State.isSignUpMode = !State.isSignUpMode;
+            const loginBtn = document.getElementById("btn-login");
+            const toggleBtn = document.getElementById("btn-toggle-mode");
+
+            if (State.isSignUpMode) {
+                loginBtn.innerText = "Create Account";
+                toggleBtn.innerText = "Already have an account? Log In";
+            } else {
+                loginBtn.innerText = "Log In";
+                toggleBtn.innerText = "Don't have an account? Create one";
+            }
+        }
+
+        function handleAuthSubmit() {
+            const username = document.getElementById("username-input").value.trim();
+            const password = document.getElementById("password-input").value.trim();
+
+            if (!username || !password) {
+                setErrorMessage("auth-msg", "Please enter both username and password!");
+                return;
+            }
+
+            setErrorMessage("auth-msg", "");
+            Storage.saveSession(username, password);
+            setView("pairing-view");
+        }
+
+        function handlePairingSubmit(autoReconnect = false) {
+            const pin = getEnteredPin();
+
+            if (!autoReconnect && pin.length < 6) {
+                setErrorMessage("pairing-msg", "Please enter the full 6-character PIN!");
+                return;
+            }
+
+            setErrorMessage("pairing-msg", "");
+            connectWebSocket(autoReconnect ? "AUTO" : pin);
+        }
+
+        // WebSocket Engine
+        function connectWebSocket(pinCode) {
+            setStatusBadge("Connecting...", "connecting");
+
+            if (State.socket) {
+                try { State.socket.close(); } catch(e) {}
+            }
+
+            State.socket = new WebSocket(Config.SERVER_URL);
+
+            State.socket.onopen = () => {
+                const username = Storage.getUser();
+                const password = Storage.getPass();
+
+                State.socket.send(JSON.stringify({
+                    type: "PAIR_MOBILE",
+                    username: username,
+                    password: password,
+                    pin: pinCode
+                }));
+            };
+
+            State.socket.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+
+                    switch (data.type) {
+                        case "PAIR_SUCCESS":
+                            Storage.setPaired(true);
+                            setView("dashboard-view");
+                            startWatchdog();
+                            break;
+
+                        case "ERROR":
+                            if (document.getElementById("pairing-view").classList.contains("active")) {
+                                setErrorMessage("pairing-msg", data.message || "Authentication/Pairing failed!");
+                            } else {
+                                setView("auth-view");
+                                setErrorMessage("auth-msg", data.message || "Invalid username or password!");
+                            }
+                            setStatusBadge("Offline", "");
+                            break;
+
+                        case "stream":
+                            if (data.image) {
+                                State.lastFrameTimestamp = Date.now();
+                                document.getElementById("fs-stream").src = "data:image/jpeg;base64," + data.image;
+                                setStatusBadge("Online", "online");
+                            }
+                            break;
+
+                        case "STATUS":
+                            if (data.status === "OFFLINE") {
+                                setStatusBadge("Offline", "");
+                            }
+                            break;
+                    }
+                } catch (err) {
+                    console.error("Invalid response from server:", err);
+                }
+            };
+
+            State.socket.onerror = () => {
+                setStatusBadge("Offline", "");
+            };
+
+            State.socket.onclose = () => {
+                setStatusBadge("Offline", "");
+            };
+        }
+
+        // Commands
+        function sendControlCommand(actionName) {
+            if (State.socket && State.socket.readyState === WebSocket.OPEN) {
+                State.socket.send(JSON.stringify({
+                    type: "command",
+                    action: actionName
+                }));
+            } else {
+                alert("Disconnected! Please verify PC Agent status.");
+            }
+        }
+
+        function openStreamView(enableControl) {
+            State.isControlModeEnabled = enableControl;
+            document.getElementById("fullscreen-overlay").style.display = "flex";
+        }
+
+        function closeStreamView() {
+            document.getElementById("fullscreen-overlay").style.display = "none";
+        }
+
+        function startWatchdog() {
+            if (State.watchdogTimer) clearInterval(State.watchdogTimer);
+
+            State.watchdogTimer = setInterval(() => {
+                if (Date.now() - State.lastFrameTimestamp > Config.STREAM_TIMEOUT_MS) {
+                    setStatusBadge("Offline", "");
+                }
+            }, 2000);
+        }
+
+        function handleLogout() {
+            if (State.watchdogTimer) clearInterval(State.watchdogTimer);
+            if (State.socket) try { State.socket.close(); } catch(e){}
+
+            Storage.clearAll();
+            setView("auth-view");
+        }
+
+        // Initialize App
+        document.addEventListener("DOMContentLoaded", () => {
+            initPinBoxSystem();
+
+            document.getElementById("btn-login").addEventListener("click", handleAuthSubmit);
+            document.getElementById("btn-toggle-mode").addEventListener("click", toggleAuthMode);
+            document.getElementById("btn-pair").addEventListener("click", () => handlePairingSubmit(false));
+            document.getElementById("btn-change-acc").addEventListener("click", () => setView("auth-view"));
+            document.getElementById("btn-lock").addEventListener("click", () => sendControlCommand("LOCK"));
+            document.getElementById("btn-remote").addEventListener("click", () => openStreamView(true));
+            document.getElementById("btn-stream").addEventListener("click", () => openStreamView(false));
+            document.getElementById("btn-close-fs").addEventListener("click", closeStreamView);
+            document.getElementById("btn-logout").addEventListener("click", handleLogout);
+
+            document.getElementById("fs-stream").addEventListener("click", () => {
+                if (State.isControlModeEnabled) {
+                    sendControlCommand("CLICK");
+                }
+            });
+
+            // Automatic Login Check for Database Account
+            const savedUser = Storage.getUser();
+            const savedPass = Storage.getPass();
+            const isPaired = Storage.getIsPaired();
 
             if (savedUser && savedPass) {
                 document.getElementById("username-input").value = savedUser;
                 document.getElementById("password-input").value = savedPass;
-                document.getElementById("auth-view").style.display = "none";
 
                 if (isPaired) {
-                    connectToPC(true);
+                    setView("dashboard-view");
+                    connectWebSocket("AUTO");
                 } else {
-                    document.getElementById("pairing-view").style.display = "flex";
+                    setView("pairing-view");
                 }
-            }
-        });
-
-        const inputs = document.querySelectorAll('.pin-input-box');
-        inputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
-            });
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) inputs[index - 1].focus();
-            });
-        });
-
-        function toggleAuthMode() {
-            const btnAction = document.getElementById("btn-auth-action");
-            const btnToggle = document.getElementById("btn-auth-toggle");
-            if (authMode === "LOGIN") {
-                authMode = "REGISTER";
-                btnAction.innerText = "Create Account";
-                btnToggle.innerText = "Already have an account? Log In";
             } else {
-                authMode = "LOGIN";
-                btnAction.innerText = "Log In";
-                btnToggle.innerText = "Don't have an account? Create one";
+                setView("auth-view");
             }
-        }
-
-        function handleAuth() {
-            const user = document.getElementById("username-input").value.trim();
-            const pass = document.getElementById("password-input").value.trim();
-            if (!user || !pass) return;
-
-            localStorage.setItem("dg_user", user);
-            localStorage.setItem("dg_pass", pass);
-
-            document.getElementById("auth-view").style.display = "none";
-            document.getElementById("pairing-view").style.display = "flex";
-        }
-
-        function connectToPC(autoReconnect = false) {
-            let pin = "";
-            inputs.forEach(i => pin += i.value.trim().toUpperCase());
-            const pairStatus = document.getElementById("pair-status");
-
-            if (!autoReconnect && pin.length < 6) {
-                pairStatus.innerText = "Enter all 6 characters.";
-                return;
-            }
-
-            pairStatus.style.color = "#0078D4";
-            pairStatus.innerText = "Connecting to PC...";
-
-            if (socket) socket.close();
-            socket = new WebSocket(SERVER_URL);
-
-            socket.onopen = () => {
-                const user = localStorage.getItem("dg_user");
-                const pass = localStorage.getItem("dg_pass");
-                socket.send(JSON.stringify({
-                    type: "PAIR_MOBILE",
-                    username: user,
-                    password: pass,
-                    pin: autoReconnect ? "AUTO" : pin
-                }));
-            };
-
-            socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-
-                if (data.type === "PAIR_SUCCESS") {
-                    localStorage.setItem("dg_paired", "true");
-                    document.getElementById("pairing-view").style.display = "none";
-                    document.getElementById("dashboard-view").style.display = "flex";
-                    socket.send(JSON.stringify({ type: "FORCE_UPDATE_UI" }));
-                } 
-                else if (data.type === "stream" && data.image) {
-                    lastFrameTime = Date.now();
-                    const imgSrc = "data:image/jpeg;base64," + data.image;
-                    document.getElementById("fs-stream").src = imgSrc;
-                    setPcStatus(true);
-                } 
-                else if (data.type === "PAIR_FAILED") {
-                    localStorage.removeItem("dg_paired");
-                    pairStatus.style.color = "#E81123";
-                    pairStatus.innerText = data.message || "Invalid PIN.";
-                    document.getElementById("pairing-view").style.display = "flex";
-                    document.getElementById("dashboard-view").style.display = "none";
-                }
-            };
-        }
-
-        setInterval(() => {
-            if (Date.now() - lastFrameTime > 3000) {
-                setPcStatus(false);
-            }
-        }, 1000);
-
-        function setPcStatus(isOnline) {
-            const label = document.getElementById("pc-status-label");
-            if (isOnline) {
-                label.innerText = "Online";
-                label.classList.add("online");
-            } else {
-                label.innerText = "Offline";
-                label.classList.remove("online");
-            }
-        }
-
-        function sendControl(action) {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({ type: "command", action: action }));
-            }
-        }
-
-        function openFullscreen(allowControl) {
-            isControlMode = allowControl;
-            const overlay = document.getElementById("fullscreen-overlay");
-            overlay.style.display = "flex";
-            
-            if (overlay.requestFullscreen) overlay.requestFullscreen();
-            else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
-        }
-
-        function closeFullscreen() {
-            document.getElementById("fullscreen-overlay").style.display = "none";
-            if (document.exitFullscreen) document.exitFullscreen();
-            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        }
-
-        document.getElementById("fs-stream").addEventListener("click", () => {
-            if (isControlMode) sendControl("CLICK");
         });
     </script>
 </body>
-</html>
+</html>i
